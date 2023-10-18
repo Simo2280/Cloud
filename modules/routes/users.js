@@ -149,4 +149,25 @@ exports.users = (app, client, database) => {
 
     });
 
+    //invalida un determinato refreshToken passando accessToken nelle headers
+    app.get('/logout', authenticateToken, async (req, res) => {
+
+        try {
+
+            const result = await database.collection('refresh').deleteOne({ email: req.user.email });
+
+            if (result.deletedCount === 1) {
+              res.sendStatus(200);
+            } else {
+                res.sendStatus(404);
+            }
+
+        } catch (error) {
+
+            res.sendStatus(400);
+
+        }
+
+});
+
 };
