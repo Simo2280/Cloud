@@ -1,0 +1,57 @@
+# Ignora i file di configurazione del sistema
+/.vscode
+/.idea
+/.DS_Store
+/.env
+
+# Ignora i moduli e le dipendenze (ad esempio, per Node.js)
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# Ignora i file di build e i risultati generati
+/build
+/dist
+/out
+/.next
+/.nuxt
+
+# Ignora i file temporanei e i backup
+*.swp
+*~
+*.bak
+
+# Ignora i file di log
+*.log
+
+# Ignora i file generati dai tuoi strumenti
+*.lock
+*.sqlite
+*.log
+*.pyc
+
+# Ignora i file di configurazione di editor
+/.vscode
+.idea/
+
+# Ignora i file di output delle query
+*.csv
+
+# Ignora i file di immagini
+*.jpg
+*.jpeg
+*.png
+*.gif
+
+# Ignora i file di documentazione
+docs/
+*.md
+
+# Ignora i file compilati
+*.min.js
+
+# Ignora il file di ambiente locale
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
