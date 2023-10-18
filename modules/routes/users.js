@@ -4,6 +4,7 @@ exports.users = (app, client, database) => {
 
     const collection = database.collection('users');
 
+    //risponde con accessToken e refreshToken passando email, password e role nelle headers
     app.get('/login', async (req, res) => {
         try {
             const bcrypt = require('bcrypt');
@@ -55,8 +56,7 @@ exports.users = (app, client, database) => {
         }
     });
     
-
-    //stampa un determinato user passando accessToken nelle headers e email nella
+    //stampa un determinato user passando accessToken nelle headers e email nella query
     app.get('/user', authenticateToken, async (req, res) => {
 
             try {
@@ -81,56 +81,65 @@ exports.users = (app, client, database) => {
 
     });
 
-    //aggiunge un utente alla collezione 'users' passando nel body email, password e role
-    app.post('/user', async (req, res) => {
+    //(solo admin) aggiunge un utente alla collezione 'users' passando accessToken nelle headers, nel body email, password e role
+    app.post('/user', authenticateToken, async (req, res) => {
 
         try {
+            
+            if (req.user.role == "admin") {
 
-            const checkUser = await collection.find({email: req.body.email}).toArray();
+                const checkUser = await collection.find({email: req.body.email}).toArray();
 
-            if ( checkUser.length === 0 ) {
+                if ( checkUser.length === 0 ) {
 
-                const bcrypt = require('bcrypt');
-                const saltRounds = 10;
-                const myPlaintextPassword = req.body.password;
+                    const bcrypt = require('bcrypt');
+                    const saltRounds = 10;
+                    const myPlaintextPassword = req.body.password;
 
-                const hashedPassword = await bcrypt.hash(myPlaintextPassword, saltRounds);
+                    const hashedPassword = await bcrypt.hash(myPlaintextPassword, saltRounds);
 
-                const userData = {
+                    const userData = {
 
-                    email: req.body.email,
-                    password: hashedPassword,
-                    role: req.body.role,
-                    usage: {
-                        latestRequestDate: new Date().toLocaleDateString(),
-                        numberOfRequests: 1
+                        email: req.body.email,
+                        password: hashedPassword,
+                        role: req.body.role,
+                        usage: {
+                            latestRequestDate: new Date().toLocaleDateString(),
+                            numberOfRequests: 1
+                        }
+
+                    };
+
+                    if ( userData.email && userData.password && userData.role ) {
+
+                        if ( userData.role !== 'admin' && userData.role !== 'user' ) {
+
+                            userData.role = 'user';
+
+                        }
+
+                        const result = await collection.insertOne({ email: userData.email, password: userData.password, role: userData.role, usage: userData.usage });
+
+                        res.sendStatus(200);
+
+                    } else {
+
+                        res.sendStatus(400);
+
                     }
-
-                };
-
-                if ( userData.email && userData.password && userData.role ) {
-
-                    if ( userData.role !== 'admin' && userData.role !== 'user' ) {
-
-                        userData.role = 'user';
-
-                    }
-
-                    const result = await collection.insertOne({ email: userData.email, password: userData.password, role: userData.role, usage: userData.usage });
-
-                    res.sendStatus(200);
 
                 } else {
 
-                    res.sendStatus(400);
+                    res.sendStatus(404);
 
-                }
+                } 
 
             } else {
 
-                res.sendStatus(404);
+                res.sendStatus(401);
 
-            } 
+            }
+            
 
         } catch (error) {
 

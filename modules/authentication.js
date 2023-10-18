@@ -7,8 +7,6 @@ exports.authenticateToken = (req, res, next) => {
     return res.sendStatus(401);
   }
 
-  console.log(token)
-
   jwt.verify(token, "secret", (err, user) => {
     if (err) {
         console.log(err)
