@@ -1,4 +1,5 @@
-const connectToDatabase = require('../models/database');
+const userModel = require('../models/userModel');
+const refreshModel = require('../models/refreshModel');
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -6,12 +7,7 @@ const jwt = require("jsonwebtoken");
 async function loginController(req, res) {
   try {
 
-    const database = await connectToDatabase();
-    const collection = database.collection("users");
-
-    const result = await collection
-        .find({ email: req.headers["email"], role: req.headers["role"] })
-        .toArray();
+    const result = await userModel.find({email: req.headers["email"], role: req.headers["role"] }).exec();
 
       if (result.length === 0) {
         return res.sendStatus(401);
@@ -20,18 +16,6 @@ async function loginController(req, res) {
       const comparePassword = await bcrypt.compare(
         req.headers["password"],
         result[0].password
-      );
-
-      const updateUsage = await collection.updateOne(
-        { email: req.headers["email"] },
-        {
-          $set: {
-            usage: {
-              latestRequestDate: new Date().toLocaleDateString(),
-              numberOfRequests: result[0].usage.numberOfRequests + 1,
-            },
-          },
-        }
       );
 
       if (comparePassword === true) {
@@ -47,21 +31,13 @@ async function loginController(req, res) {
         );
 
         try {
-          const existingRefreshToken = await database
-            .collection("refresh")
-            .findOne({ email: req.headers.email });
+          const existingRefreshToken = await refreshModel.find({ email: req.headers["email"] }).exec();
 
           if (existingRefreshToken) {
-            await database
-              .collection("refresh")
-              .updateOne(
-                { email: req.headers.email },
-                { $set: { refreshToken } }
-              );
+            await refreshModel.updateOne({ email: req.headers.email }, { refreshToken: refreshToken });
           } else {
-            await database
-              .collection("refresh")
-              .insertOne({ email: req.headers.email, refreshToken });
+            const doc = new refreshModel({ email: req.headers.email, refreshToken: refreshToken });
+            await doc.save();
           }
         } catch (error) {
           return res.sendStatus(500);
@@ -90,13 +66,10 @@ async function loginController(req, res) {
 async function logoutController(req, res) {
     try {
 
-        const database = await connectToDatabase();
-
-        const result = await database
-          .collection("refresh")
-          .deleteOne({ email: req.user.email });
+        const email = req.user.email;
+        const result = await RefreshToken.findOneAndDelete({ email });
   
-        if (result.deletedCount === 1) {
+        if (result) {
           res.sendStatus(200);
         } else {
           res.sendStatus(404);
@@ -109,17 +82,13 @@ async function logoutController(req, res) {
 async function refreshController(req, res) {
     try {
 
-        const database = await connectToDatabase();
-
         const refreshToken = req.cookies.refreshToken;
   
         if (!refreshToken) {
           return res.sendStatus(401);
         }
   
-        const existingRefreshToken = await database
-          .collection("refresh")
-          .findOne({ refreshToken: refreshToken });
+        const existingRefreshToken = await refreshModel.find({ refreshToken: refreshToken }).exec();
   
         if (!existingRefreshToken) {
           return res.sendStatus(403);

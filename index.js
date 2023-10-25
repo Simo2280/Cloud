@@ -1,5 +1,7 @@
 //richiamo i moduli necessari
 
+const db = require('./modules/models/database')
+
 const express = require('express');
 
 const cors = require('cors');
@@ -29,6 +31,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 dotenv.config();
 
 //connetto al database
+
+db();
 
 app.use(express.json());
 app.use(urlencoded({ extended : true }));
