@@ -1,0 +1,145 @@
+const connectToDatabase = require('../models/database');
+
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+async function loginController(req, res) {
+  try {
+
+    const database = await connectToDatabase();
+    const collection = database.collection("users");
+
+    const result = await collection
+        .find({ email: req.headers["email"], role: req.headers["role"] })
+        .toArray();
+
+      if (result.length === 0) {
+        return res.sendStatus(401);
+      }
+
+      const comparePassword = await bcrypt.compare(
+        req.headers["password"],
+        result[0].password
+      );
+
+      const updateUsage = await collection.updateOne(
+        { email: req.headers["email"] },
+        {
+          $set: {
+            usage: {
+              latestRequestDate: new Date().toLocaleDateString(),
+              numberOfRequests: result[0].usage.numberOfRequests + 1,
+            },
+          },
+        }
+      );
+
+      if (comparePassword === true) {
+        const accessToken = jwt.sign(
+          { email: req.headers["email"], role: req.headers.role },
+          process.env.JWT_SECRET,
+          { expiresIn: "1h" }
+        );
+        const refreshToken = jwt.sign(
+          { email: req.headers["email"], role: req.headers.role },
+          process.env.JWT_SECRET,
+          { expiresIn: "1d" }
+        );
+
+        try {
+          const existingRefreshToken = await database
+            .collection("refresh")
+            .findOne({ email: req.headers.email });
+
+          if (existingRefreshToken) {
+            await database
+              .collection("refresh")
+              .updateOne(
+                { email: req.headers.email },
+                { $set: { refreshToken } }
+              );
+          } else {
+            await database
+              .collection("refresh")
+              .insertOne({ email: req.headers.email, refreshToken });
+          }
+        } catch (error) {
+          return res.sendStatus(500);
+        }
+
+        const response = {
+          accessToken,
+        };
+
+        res.cookie("refreshToken", refreshToken, {
+          path: "/refresh",
+          sameSite: true,
+          httpOnly: true,
+        });
+
+        res.json(response);
+      } else {
+        return res.sendStatus(401);
+      }
+    } catch (error) {
+        console.log(error)
+      res.sendStatus(400);
+    }
+}
+
+async function logoutController(req, res) {
+    try {
+
+        const database = await connectToDatabase();
+
+        const result = await database
+          .collection("refresh")
+          .deleteOne({ email: req.user.email });
+  
+        if (result.deletedCount === 1) {
+          res.sendStatus(200);
+        } else {
+          res.sendStatus(404);
+        }
+      } catch (error) {
+        res.sendStatus(400);
+      }
+}
+
+async function refreshController(req, res) {
+    try {
+
+        const database = await connectToDatabase();
+
+        const refreshToken = req.cookies.refreshToken;
+  
+        if (!refreshToken) {
+          return res.sendStatus(401);
+        }
+  
+        const existingRefreshToken = await database
+          .collection("refresh")
+          .findOne({ refreshToken: refreshToken });
+  
+        if (!existingRefreshToken) {
+          return res.sendStatus(403);
+        }
+  
+        jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
+          if (err) {
+            return res.sendStatus(403);
+          }
+  
+          const user = { email: decoded.email, role: decoded.role };
+          const newAccessToken = jwt.sign(user, process.env.JWT_SECRET, {
+            expiresIn: "1h",
+          });
+  
+          res.json({ newAccessToken });
+        });
+      } catch (error) {
+        res.sendStatus(400);
+      }
+}
+
+module.exports = { loginController, logoutController, refreshController };
