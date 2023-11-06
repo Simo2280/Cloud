@@ -31,11 +31,12 @@ async function loginController(req, res) {
         );
 
         try {
-          const existingRefreshToken = await refreshModel.find({ email: req.headers["email"] }).exec();
+          const existingRefreshToken = await refreshModel.findOne({ email: req.headers["email"] }).exec();
 
           if (existingRefreshToken) {
             await refreshModel.updateOne({ email: req.headers.email }, { refreshToken: refreshToken });
           } else {
+            console.log("a")
             const doc = new refreshModel({ email: req.headers.email, refreshToken: refreshToken });
             await doc.save();
           }
@@ -67,7 +68,7 @@ async function logoutController(req, res) {
     try {
 
         const email = req.user.email;
-        const result = await RefreshToken.findOneAndDelete({ email });
+        const result = await refreshModel.findOneAndDelete({ email });
   
         if (result) {
           res.sendStatus(200);
@@ -75,6 +76,7 @@ async function logoutController(req, res) {
           res.sendStatus(404);
         }
       } catch (error) {
+        console.log(error)
         res.sendStatus(400);
       }
 }

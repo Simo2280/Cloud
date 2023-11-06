@@ -1,12 +1,9 @@
 const userModel = require('../models/userModel');
-const refreshModel = require('../models/refreshModel');
 
 async function getUserController(req, res) {
     try {
 
-        const result = await userModel.findOne({ email: req.query.email })
-
-        console.log(result)
+        const result = await userModel.findOne({ email: req.query.email }).select('-password');
   
         if (result.length !== 0) {
           res.send(result);
@@ -25,7 +22,7 @@ async function postUserController(req, res) {
         if (req.user.role == "admin") {
         const checkUser =  await userModel.findOne({ email: req.query.email });
 
-        if (checkUser.length === 0) {
+        if (checkUser == null) {
             const bcrypt = require("bcrypt");
             const saltRounds = 10;
             const myPlaintextPassword = req.body.password;
@@ -75,10 +72,10 @@ async function postUserController(req, res) {
 async function putUserController(req, res) {
     try {
         if (req.body.name && req.body.surname) {
-        const checkUser = await userModel.findOne(req.query.email);
+        const checkUser = await userModel.findOne({ email: req.query.email });
 
-        if (checkUser.length != 0) {
-            await refreshModel.updateOne({ email: req.user.email },
+        if (checkUser.length !== null) {
+            await userModel.updateOne({ email: req.query.email },
                 { name: req.body.name, surname: req.body.surname });
 
             res.sendStatus(200);

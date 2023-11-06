@@ -3,7 +3,7 @@ exports.auth = (app) => {
     const jwt = require("jsonwebtoken");
   
     const { authenticateToken, expiredToken } = require("../authentication");
-    const authController = require('../controllers/authController');
+    const authController = require("../controllers/authController");
   
     //risponde con accessToken e refreshToken passando email, password e role nelle headers
     app.get("/login", authController.loginController);
