@@ -1,5 +1,7 @@
 const userModel = require('../models/userModel');
 
+const bcrypt = require("bcrypt");
+
 async function getUserController(req, res) {
     try {
 
@@ -23,7 +25,6 @@ async function postUserController(req, res) {
         const checkUser =  await userModel.findOne({ email: req.query.email });
 
         if (checkUser == null) {
-            const bcrypt = require("bcrypt");
             const saltRounds = 10;
             const myPlaintextPassword = req.body.password;
 
@@ -71,20 +72,58 @@ async function postUserController(req, res) {
 
 async function putUserController(req, res) {
     try {
-        if (req.body.name && req.body.surname) {
-        const checkUser = await userModel.findOne({ email: req.query.email });
+        if(req.user.role == "admin") {
 
-        if (checkUser.length !== null) {
-            await userModel.updateOne({ email: req.query.email },
-                { name: req.body.name, surname: req.body.surname });
+            const updateData = {};
 
+            if (req.body.email) {
+              updateData.email = req.body.email;
+            }
+      
+            if (req.body.password) {
+              const saltRounds = 10;
+              const myPlaintextPassword = req.body.password;
+              const hashedPassword = await bcrypt.hash(myPlaintextPassword, saltRounds);
+              updateData.password = hashedPassword;
+            }
+      
+            if (req.body.role) {
+              updateData.role = req.body.role;
+            }
+      
+            if (req.body.name) {
+              updateData.name = req.body.name;
+            }
+      
+            if (req.body.surname) {
+              updateData.surname = req.body.surname;
+            }
+      
+            await userModel.updateOne({ email: req.user.email }, updateData);
             res.sendStatus(200);
+
         } else {
-            res.sendStatus(400);
+
+            if (req.body.password) {
+
+                const saltRounds = 10;
+                const myPlaintextPassword = req.body.password;
+
+                const hashedPassword = await bcrypt.hash(
+                myPlaintextPassword,
+                saltRounds
+                );
+        
+                    await userModel.updateOne({ email: req.user.email },
+                        { password: hashedPassword });
+        
+                    res.sendStatus(200);
+                } else {
+                    res.sendStatus(400);
+                }
+
         }
-        } else {
-        res.sendStatus(404);
-        }
+
     } catch (error) {
         console.log(error);
         res.sendStatus(400);

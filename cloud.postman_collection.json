@@ -1,0 +1,244 @@
+{
+	"info": {
+		"_postman_id": "487c2134-3a50-4e19-be6c-1e6079951581",
+		"name": "Esercizio",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28485062",
+		"_collection_link": "https://ostialido.postman.co/workspace/Gameo~0a6e41a0-a3bf-4bed-b13f-3a383f87b3aa/collection/28485062-487c2134-3a50-4e19-be6c-1e6079951581?action=share&source=collection_link&creator=28485062"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "localhost:4000/login",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "email",
+								"value": "test",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "simo",
+								"type": "text"
+							},
+							{
+								"key": "role",
+								"value": "user",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:4000/login",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:4000/refresh",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:4000/refresh",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:4000/logout",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyIiwicGFzc3dvcmQiOiJzaW1vIiwicm9sZSI6InVzZXIiLCJpYXQiOjE2OTc4MDUxNDAsImV4cCI6MTY5NzgwODc0MH0.qVgtYo0nPtjNDoPUz9HanMJWaHDGozbE89JCV_qbcSA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "test3",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "simo",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "user",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:4000/logout",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "localhost:4000/user?email=test",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjk5Mjc2OTcwLCJleHAiOjE2OTkyODA1NzB9.xODxw3hdSn4iLGqRsuHRD_8J1LeHJyY9mxopR-Ra1sa",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:4000/user?email=test4",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"user"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "test4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:4000/user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluIiwicGFzc3dvcmQiOiJzaW1vIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjk3NjI0MzYwLCJleHAiOjE2OTc2Mjc5NjB9.XG_zAhaMDlZK_WnA_V9PLqS4dfn6N7YKoIkIuwhV4FU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "test3",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "simo",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "user",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:4000/user",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:4000/user",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyIiwicm9sZSI6InVzZXIiLCJpYXQiOjE2OTc4MTExMTEsImV4cCI6MTY5NzgxMTE3MX0.4eTpLvCElKtZzwhRuwH8ttKUE_OgTzjncX2_ByOoDqQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "test3",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:4000/user",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "books",
+			"item": []
+		}
+	]
+}

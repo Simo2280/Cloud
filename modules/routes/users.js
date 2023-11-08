@@ -10,7 +10,7 @@ exports.users = (app) => {
   //(solo admin) aggiunge un utente alla collezione 'users' passando accessToken nelle headers, nel body email, password, role, name, surname
   app.post("/user", authenticateToken, usersController.postUserController);
 
-  //modifica email dell'utente passando nelle headers accessToken e nel body name e surname
+  //modifica nome e cognome dell'utente specificato in query passando nelle headers accessToken e nel body name e surname
   app.put("/user", authenticateToken, usersController.putUserController);
 
 };
