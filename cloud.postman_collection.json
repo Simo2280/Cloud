@@ -238,7 +238,227 @@
 		},
 		{
 			"name": "books",
-			"item": []
+			"item": [
+				{
+					"name": "localhost:4000/books",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/books",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:4000/book?ISBN=148940",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjk5NDM0Mjk0LCJleHAiOjE2OTk0Mzc4OTR9.VdhWAN1IDIDPlttuKyNJ7Mo4VXmJ2IhkoAay1c8AJPg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:4000/book?ISBN=148940",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"book"
+							],
+							"query": [
+								{
+									"key": "ISBN",
+									"value": "148940"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:4000/book",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjk5NDM0Mjk0LCJleHAiOjE2OTk0Mzc4OTR9.VdhWAN1IDIDPlttuKyNJ7Mo4VXmJ2IhkoAay1c8AJPg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "wcdc",
+									"type": "text"
+								},
+								{
+									"key": "ISBN",
+									"value": "48620",
+									"type": "text"
+								},
+								{
+									"key": "author",
+									"value": "jnc",
+									"type": "text"
+								},
+								{
+									"key": "genre",
+									"value": "mklm",
+									"type": "text"
+								},
+								{
+									"key": "publishedYear",
+									"value": "2003",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:4000/book",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"book"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:4000/book",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjk5NDM0Mjk0LCJleHAiOjE2OTk0Mzc4OTR9.VdhWAN1IDIDPlttuKyNJ7Mo4VXmJ2IhkoAay1c8AJPg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "wcdc",
+									"type": "text"
+								},
+								{
+									"key": "ISBN",
+									"value": "48620",
+									"type": "text"
+								},
+								{
+									"key": "author",
+									"value": "jnc",
+									"type": "text"
+								},
+								{
+									"key": "genre",
+									"value": "mklm",
+									"type": "text"
+								},
+								{
+									"key": "publishedYear",
+									"value": "2003",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:4000/book",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"book"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:4000/book",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjk5NDM0Mjk0LCJleHAiOjE2OTk0Mzc4OTR9.VdhWAN1IDIDPlttuKyNJ7Mo4VXmJ2IhkoAay1c8AJPg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "wcdc",
+									"type": "text"
+								},
+								{
+									"key": "ISBN",
+									"value": "48620",
+									"type": "text"
+								},
+								{
+									"key": "author",
+									"value": "jnc",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "genre",
+									"value": "mklm",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "publishedYear",
+									"value": "2003",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:4000/book?ISBN=148940",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"book"
+							],
+							"query": [
+								{
+									"key": "ISBN",
+									"value": "148940"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

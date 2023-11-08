@@ -22,7 +22,7 @@ async function postUserController(req, res) {
     try {
 
         if (req.user.role == "admin") {
-        const checkUser =  await userModel.findOne({ email: req.query.email });
+        const checkUser =  await userModel.findOne({ email: req.body.email });
 
         if (checkUser == null) {
             const saltRounds = 10;
